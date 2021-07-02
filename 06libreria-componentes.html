@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <form action="" class="to-do-form">
+    <input type="text" name="item" class="to-do-item">
+    <br>
+    <input type="submit">
+  </form>
+  <h2>Listas</h2>
+  <ul class="to-do-list"></ul>
+  <script src="06Components.js"></script>
+  <script>
+    const d = document,
+      app = new Component({
+        el: ".to-do-list",
+        data: {
+          todoList: [],
+        },
+        template: function (props) {
+          if (props.todoList.length < 1) {
+            return `<p>No hay listas de cosas por hacer</p>`;
+          }
+          let toDo = props.todoList.map((item) => `<li>${item}</li>`).join("");
+          return toDo;
+        },
+      });
+
+    document.addEventListener("DOMContentLoaded", app.render);
+    app.setState({
+      todoList: ["tarea 1", "tarea 2", "tarea 3"],
+    });
+
+    d.addEventListener("submit", (e) => {
+      if (!e.target.matches(".to-do-form")) return false;
+      e.preventDefault();
+      const $inputt = d.querySelector(".to-do-item");
+      if (!$inputt) return;
+      console.log($inputt);
+      let lastState = app.copyState();
+
+      lastState.todoList.push($inputt.value);
+      app.setState({ todoList: lastState.todoList });
+
+      $inputt.value = "";
+      $inputt.focus();
+    });
+
+  </script>
+</body>
+
+</html>
